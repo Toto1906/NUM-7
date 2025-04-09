@@ -12,7 +12,7 @@ dxy = L/(N+1)
 
 A = np.zeros(((N+1)**2, (N+1)**2))
 
-B = np.ones(((N+1)**2))
+B = np.zeros(((N+1)**2))
 
 for i in range(len(B)):
     if i%(N+1) == 0 or (i)%(N+1)==N:
@@ -74,5 +74,8 @@ ax.add_patch(rect)
 ax.set_xticks(ticks=(0, L/3, 2*L/3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
 ax.set_yticks(ticks=(0, L/3, 2*L/3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
 ax.tick_params(axis='both', which='major', labelsize=10)
-fig.colorbar(mappable=im)
+ax.set_title(r'Temperature diffusion of a plate of temperatures $T_{ext}=$' + f'{T_ext}' + r' and $T_{int}=$' + f'{T_int}')
+ax.set_aspect('equal')
+fig.colorbar(mappable=im, label=r'Temperature ($^{\circ}$C)')
+fig.savefig('Temperature_diffusion.png', dpi=200)
 plt.show()
