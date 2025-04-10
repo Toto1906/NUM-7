@@ -2,12 +2,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib
+import time
 matplotlib.use('TkAgg')
+
+start_time = time.time()
 
 T_ext = 20      # Initial exterior temperature
 T_int = 500     # Initial interior temperature
 L = 15          # Length of square
-N = 100         # Mesh size
+N = 50          # Mesh size
 dxy = L/(N+1)
 
 A = np.zeros(((N+1)**2, (N+1)**2))  # Matrix A initialization
@@ -64,6 +67,9 @@ print(B)
 C = np.linalg.solve(A, B)
 C = C.reshape((N+1, N+1))
 print(C)
+print(C.shape)
+
+print("--- %s seconds ---" % (time.time() - start_time))
 
 # Setting the parameters of the plot
 x = np.linspace(0, L, N+1)
@@ -73,15 +79,24 @@ X, Y = np.meshgrid(x, y)
 # Inside rectangle of the plate
 rect = patches.Rectangle((L/3, L/3), L/3, L/3, linewidth=1, edgecolor='black', facecolor='none')
 
+color='afmhot'
+
 # Plotting the temperature
-fig, ax = plt.subplots()
-im = ax.pcolormesh(X, Y, C, cmap='plasma')
-ax.add_patch(rect)
-ax.set_xticks(ticks=(0, L/3, 2*L/3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
-ax.set_yticks(ticks=(0, L/3, 2*L/3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
-ax.tick_params(axis='both', which='major', labelsize=10)
-ax.set_title(r'Temperature diffusion of a plate of temperatures $T_{ext}=$' + f'{T_ext}' + r' and $T_{int}=$' + f'{T_int}')
-ax.set_aspect('equal')
-fig.colorbar(mappable=im, label=r'Temperature ($^{\circ}$C)')
-fig.savefig('Temperature_diffusion.png', dpi=200)
+fig1, (ax1) = plt.subplots(1, 1)
+
+im = ax1.pcolormesh(X, Y, C, cmap=color)
+ax1.add_patch(rect)
+ax1.set_xticks(ticks=(0, L / 3, 2 * L / 3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
+ax1.set_yticks(ticks=(0, L / 3, 2 * L / 3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
+ax1.tick_params(axis='both', which='major', labelsize=10)
+ax1.set_title(r'Temperature diffusion of a plate of temperatures $T_{ext}=$' + f'{T_ext}' + r' and $T_{int}=$' + f'{T_int}')
+ax1.set_aspect('equal')
+fig1.colorbar(mappable=im, label=r'Temperature ($^{\circ}$C)')
+fig1.savefig('Temperature_diffusion.png', dpi=200)
+
+# ax2.plot(x, C[int(L/2)])
+
+fig2, ax = plt.subplots(subplot_kw={"projection": "3d"})
+ax.plot_surface(X, Y, C, cmap=color)
+
 plt.show()
