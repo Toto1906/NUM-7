@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib
 import time
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
 
 start_time = time.time()
 

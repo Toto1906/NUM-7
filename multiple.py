@@ -6,7 +6,7 @@ import time
 import tracemalloc
 from main import simple_analisis
 
-matplotlib.use('TkAgg')
+#matplotlib.use('TkAgg')
 
 Text = 20  # Initial exterior temperature
 Tint = 500  # Initial interior temperature
