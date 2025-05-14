@@ -4,13 +4,16 @@ Created on Mon May 12 22:34:43 2025
 
 @author: remyk
 """
-
+import matplotlib
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.sparse import lil_matrix, csr_matrix
 from scipy.sparse.linalg import spsolve
 import time
 import tracemalloc
+import zoom
+
+matplotlib.use('TkAgg')
 
 
 def solve_quarter_plate(N, L=15, T_ext=20, T_int=500):
@@ -101,15 +104,18 @@ def mesh_error_vs_reference(N_ref, N_values, L=15):
     T_ref, x_ref, y_ref, t_ref, m_ref = solve_quarter_plate(N_ref, L)
     results = {'h': [], 'error': [], 'time': [], 'memory': []}
 
-    for N in N_values:
-        T, x, y, t, m = solve_quarter_plate(N, L)
-        ratio = (N_ref + 1) // (N + 1)
-        T_ref_ds = T_ref[::ratio, ::ratio]
-        if T_ref_ds.shape != T.shape:
-            T_ref_ds = T_ref_ds[:T.shape[0], :T.shape[1]]
-        err = np.linalg.norm(T - T_ref_ds) / np.linalg.norm(T_ref_ds)
+    for i in range(len(N_values)):
+        T, x, y, t, m = solve_quarter_plate(N_values[i], L)
+        # ratio = (N_ref + 1) // (N + 1)
+        # T_ref_ds = T_ref[::ratio, ::ratio]
+        # if T_ref_ds.shape != T.shape:
+        #     T_ref_ds = T_ref_ds[:T.shape[0], :T.shape[1]]
+        # err = np.linalg.norm(T - T_ref_ds) / np.linalg.norm(T_ref_ds)
 
-        results['h'].append(L/(N+1))
+        new_err_matrix = zoom.zoom_lil_matrix(T, T_ref.shape, T.shape)
+        err = zoom.error(T_ref, new_err_matrix)
+
+        results['h'].append((N_values[i]))
         results['error'].append(err)
         results['time'].append(t)
         results['memory'].append(m)
@@ -139,8 +145,8 @@ def plot_convergence(results, N_values):
 
 
     plt.figure()
-    plt.loglog(h_sorted, err_sorted, 'o-')
-    plt.xlabel('Grid spacing h')
+    plt.plot(h_sorted, err_sorted, 'o-')
+    plt.xlabel('N')
     plt.ylabel('Relative error vs ref')
     plt.title('Error vs h')
     plt.grid(True, which='both', linestyle='--')
@@ -165,8 +171,9 @@ def plot_convergence(results, N_values):
 
 # test^2
 
-N_ref = 100
-coarser =[5,10,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100]
+N_ref = 200
+coarser = np.arange(5, 200, 1)
+
 results = mesh_error_vs_reference(N_ref, coarser)
 
 # Plot reference solution
