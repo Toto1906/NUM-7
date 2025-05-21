@@ -56,19 +56,9 @@ def simple_analisis(N, dxy, T_ext, T_int, multiple=False):
     for i in range((N+1)**2 - N-1, (N+1)**2):
         A[i][i] = 1
 
-    # Verification for A
-    print(A.shape)
-    print(A)
-
-    # Verification for B
-    print(B.shape)
-    print(B)
-
     # Solving the problem
     C = np.linalg.solve(A, B)
     C = C.reshape((N+1, N+1))
-    print(C)
-    print(C.shape)
 
     return C
 

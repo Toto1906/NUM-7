@@ -148,7 +148,7 @@ def plot_convergence(results, N_values):
     plt.plot(h_sorted, err_sorted, 'o-')
     plt.xlabel('N')
     plt.ylabel('Relative error vs ref')
-    plt.title('Error vs h')
+    plt.title('Error vs N')
     plt.grid(True, which='both', linestyle='--')
     plt.tight_layout()
     plt.show()
@@ -171,8 +171,8 @@ def plot_convergence(results, N_values):
 
 # test^2
 
-N_ref = 200
-coarser = np.arange(5, 200, 1)
+N_ref = 100
+coarser = np.arange(5, 100, 1)
 
 results = mesh_error_vs_reference(N_ref, coarser)
 

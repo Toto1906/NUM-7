@@ -12,7 +12,6 @@ Text = 20  # Initial exterior temperature
 Tint = 500  # Initial interior temperature
 L_ = 15  # Length of square
 N_ = np.arange(10, 100, 10)  # Mesh size
-print(N_)
 dxy_ = L_ / (N_ + 1)
 
 
@@ -37,14 +36,6 @@ def multiple_analisis(N, dxy, T_ext, T_int):
         # New error calc
         new_lil_matrix = zoom.zoom_lil_matrix(C, M_ref.shape, C.shape)
         err = zoom.error(M_ref, new_lil_matrix)
-
-        # # Error calc
-        # ratio = N_[len(N_)-1] // N_[i]
-        # M_ref_ds = M_ref[::ratio, ::ratio]
-        # if M_ref_ds.shape != (C.shape):
-        #     M_ref_ds = M_ref_ds[:C.shape[0], :C.shape[1]]
-        # err = np.linalg.norm(C - M_ref_ds) / np.linalg.norm(M_ref_ds)
-
         error = np.append(error, err)
 
     return tt_, mem_, error
@@ -65,8 +56,5 @@ def trace_mem_time_err(N, mem, err):
 
 
 tt, mem, err = multiple_analisis(N_, dxy_, Text, Tint)
-
-print(tt.shape, mem.shape, err.shape)
-print(tt, mem, err)
 trace_mem_time_err(N_, mem, err)
 
