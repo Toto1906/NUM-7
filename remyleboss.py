@@ -173,6 +173,8 @@ def plot_convergence(results, N_values):
     plt.show()
 
 # test^2
+#monitor time of whole operation
+initial_time = time.time()
 
 N_ref = 200
 coarser = np.arange(5, N_ref, 1)
@@ -181,7 +183,13 @@ results = mesh_error_vs_reference(N_ref, coarser)
 
 # Plot reference solution
 Tref, xref, yref, _, _ = solve_quarter_plate(N_ref)
+#monitor time of whole operation
+operation_time = time.time() - initial_time
+print(f"Operation time : {operation_time}")
+
 plot_temperature(Tref, xref, yref, L=15)
+
+
 
 # Plot error convergence and performance
 plot_convergence(results, coarser)
@@ -189,43 +197,48 @@ plot_convergence(results, coarser)
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from scipy.signal import find_peaks
 from sklearn.metrics import r2_score
 
 # Define model functions
-def exp_model(N, a, b):
-    return a * np.exp(-b * N)
 
 def power_model(N, a, b):
     return a * N ** (-b)
 
 # Extract data
+
 N_vals = np.array(results['h'])
 errors = np.array(results['error'])
 
-# Exponential fit
-popt_exp, _ = curve_fit(exp_model, N_vals, errors, p0=(1.0, 0.01))
-exp_fit = exp_model(N_vals, *popt_exp)
-r2_exp = r2_score(errors, exp_fit)
+peaks_pos, _ = find_peaks(errors, distance=5)
+print(peaks_pos)
+peaks_neg, _ = find_peaks(-errors, distance=5)
+print(peaks_neg)
 
-# Power law fit
-popt_pow, _ = curve_fit(power_model, N_vals, errors, p0=(1.0, 1.0))
-pow_fit = power_model(N_vals, *popt_pow)
-r2_pow = r2_score(errors, pow_fit)
+# Upper Power law fit
+popt_pow_high, _ = curve_fit(power_model, N_vals[peaks_pos], errors[peaks_pos], p0=(1.0, 1.0))
+pow_fit_high = power_model(N_vals[peaks_pos], *popt_pow_high)
+r2_pow_high = r2_score(errors[peaks_pos], pow_fit_high)
+
+# Lower Power law fit
+popt_pow_low, _ = curve_fit(power_model, N_vals[peaks_neg], errors[peaks_neg], p0=(1.0, 1.0))
+pow_fit_low = power_model(N_vals[peaks_neg], *popt_pow_low)
+r2_pow_low = r2_score(errors[peaks_neg], pow_fit_low)
 
 # Print fitted models and R²
-print(f"Exponential fit: error ≈ {popt_exp[0]:.2e} · exp(-{popt_exp[1]:.3f}·N), R² = {r2_exp:.4f}")
-print(f"Power law fit : error ≈ {popt_pow[0]:.2e} · N^(-{popt_pow[1]:.3f}), R² = {r2_pow:.4f}")
+print(f"Upper Power law fit : error ≈ {popt_pow_high[0]:.2e} · N^(-{popt_pow_high[1]:.3f}), R² = {r2_pow_high:.4f}")
+print(f"Lower Power law fit : error ≈ {popt_pow_low[0]:.2e} · N^(-{popt_pow_low[1]:.3f}), R² = {r2_pow_low:.4f}")
 
 # Smooth N values for plotting
 N_smooth = np.linspace(min(N_vals), max(N_vals), 300)
-exp_smooth = exp_model(N_smooth, *popt_exp)
-pow_smooth = power_model(N_smooth, *popt_pow)
+pow_smooth_high = power_model(N_smooth, *popt_pow_high)
+pow_smooth_low = power_model(N_smooth, *popt_pow_low)
 
 # Plot in linear scale
 plt.figure()
 plt.plot(N_vals, errors, 'ko', label='Data')
-plt.plot(N_smooth, exp_smooth, 'r-', label=f'Exponential Fit (R²={r2_exp:.4f})')
-plt.plot(N_smooth, pow_smooth, 'b--', label=f'Power Law Fit (R²={r2_pow:.4f})')
+plt.plot(N_smooth, pow_smooth_high, 'r-', label=f'Upper Power law fit (R²={r2_pow_high:.4f})')
+plt.plot(N_smooth, pow_smooth_low, 'b--', label=f'Lower Power law fit (R²={r2_pow_low:.4f})')
 plt.xlabel('N')
 plt.ylabel('Relative error')
 plt.title('Error vs N (Linear Scale)')
@@ -236,8 +249,8 @@ plt.tight_layout()
 # Plot in log-log scale
 plt.figure()
 plt.loglog(N_vals, errors, 'ko', label='Data')
-plt.loglog(N_smooth, exp_smooth, 'r-', label='Exponential Fit')
-plt.loglog(N_smooth, pow_smooth, 'b--', label='Power Law Fit')
+plt.loglog(N_smooth, pow_smooth_high, 'r-', label='Upper Power law fit')
+plt.loglog(N_smooth, pow_smooth_low, 'b--', label='Lower Power law fit')
 plt.xlabel('N (log scale)')
 plt.ylabel('Error (log scale)')
 plt.title('Log-Log Plot: Error vs N')
