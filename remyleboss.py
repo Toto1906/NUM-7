@@ -115,6 +115,9 @@ def mesh_error_vs_reference(N_ref, N_values, L=15):
         new_err_matrix = zoom.zoom_lil_matrix(T, T_ref.shape, T.shape)
         err = zoom.error(T_ref, new_err_matrix)
 
+        #new_ref_matrix = zoom.dezoom_ref_matrix(T_ref, T_ref.shape, T.shape)
+        #err = zoom.error(new_ref_matrix, T)
+
         results['h'].append((N_values[i]))
         results['error'].append(err)
         results['time'].append(t)
@@ -171,8 +174,8 @@ def plot_convergence(results, N_values):
 
 # test^2
 
-N_ref = 100
-coarser = np.arange(5, 100, 1)
+N_ref = 200
+coarser = np.arange(5, N_ref, 1)
 
 results = mesh_error_vs_reference(N_ref, coarser)
 
@@ -183,4 +186,62 @@ plot_temperature(Tref, xref, yref, L=15)
 # Plot error convergence and performance
 plot_convergence(results, coarser)
 
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
+from sklearn.metrics import r2_score
 
+# Define model functions
+def exp_model(N, a, b):
+    return a * np.exp(-b * N)
+
+def power_model(N, a, b):
+    return a * N ** (-b)
+
+# Extract data
+N_vals = np.array(results['h'])
+errors = np.array(results['error'])
+
+# Exponential fit
+popt_exp, _ = curve_fit(exp_model, N_vals, errors, p0=(1.0, 0.01))
+exp_fit = exp_model(N_vals, *popt_exp)
+r2_exp = r2_score(errors, exp_fit)
+
+# Power law fit
+popt_pow, _ = curve_fit(power_model, N_vals, errors, p0=(1.0, 1.0))
+pow_fit = power_model(N_vals, *popt_pow)
+r2_pow = r2_score(errors, pow_fit)
+
+# Print fitted models and R²
+print(f"Exponential fit: error ≈ {popt_exp[0]:.2e} · exp(-{popt_exp[1]:.3f}·N), R² = {r2_exp:.4f}")
+print(f"Power law fit : error ≈ {popt_pow[0]:.2e} · N^(-{popt_pow[1]:.3f}), R² = {r2_pow:.4f}")
+
+# Smooth N values for plotting
+N_smooth = np.linspace(min(N_vals), max(N_vals), 300)
+exp_smooth = exp_model(N_smooth, *popt_exp)
+pow_smooth = power_model(N_smooth, *popt_pow)
+
+# Plot in linear scale
+plt.figure()
+plt.plot(N_vals, errors, 'ko', label='Data')
+plt.plot(N_smooth, exp_smooth, 'r-', label=f'Exponential Fit (R²={r2_exp:.4f})')
+plt.plot(N_smooth, pow_smooth, 'b--', label=f'Power Law Fit (R²={r2_pow:.4f})')
+plt.xlabel('N')
+plt.ylabel('Relative error')
+plt.title('Error vs N (Linear Scale)')
+plt.legend()
+plt.grid(True, linestyle='--')
+plt.tight_layout()
+
+# Plot in log-log scale
+plt.figure()
+plt.loglog(N_vals, errors, 'ko', label='Data')
+plt.loglog(N_smooth, exp_smooth, 'r-', label='Exponential Fit')
+plt.loglog(N_smooth, pow_smooth, 'b--', label='Power Law Fit')
+plt.xlabel('N (log scale)')
+plt.ylabel('Error (log scale)')
+plt.title('Log-Log Plot: Error vs N')
+plt.legend()
+plt.grid(True, which='both', linestyle='--')
+plt.tight_layout()
+plt.show()
