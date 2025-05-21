@@ -42,16 +42,19 @@ def multiple_analisis(N, dxy, T_ext, T_int):
 
 
 def trace_mem_time_err(N, mem, err):
-    fig1, ax1 = plt.subplots(1, 3, sharex=True)
-    ax1[0].plot(N, mem)
-    ax1[0].set_title('Memory required')
-    ax1[2].set_xlabel('N')
-    ax1[1].plot(N, tt)
-    ax1[1].set_title('Time required')
-    ax1[2].set_xlabel('N')
-    ax1[2].plot(N, err)
-    ax1[2].set_title('Error')
-    ax1[2].set_xlabel('N')
+    fig1, ax1 = plt.subplots(1, 1, sharex=True)
+    ax1.plot(N, mem, 's--', label='Memory (kB)', color='gray')
+    ax1.set_title('Memory required')
+    ax1.set_xlabel('N')
+    ax1.plot(N, tt, 'o-', label='Time (s)')
+    ax1.set_title('Time required')
+    ax1.grid(True, which='both', linestyle='--')
+
+    fig2, ax2 = plt.subplots(1, 1, sharex=True)
+    ax2.set_xlabel('N')
+    ax2.plot(N, err)
+    ax2.set_title('Error')
+    ax2.set_xlabel('N')
     plt.show()
 
 

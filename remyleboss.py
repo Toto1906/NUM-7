@@ -171,8 +171,8 @@ def plot_convergence(results, N_values):
 
 # test^2
 
-N_ref = 100
-coarser = np.arange(5, 100, 1)
+N_ref = 99
+coarser = np.arange(5, N_ref, 1)
 
 results = mesh_error_vs_reference(N_ref, coarser)
 
