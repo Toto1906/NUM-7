@@ -102,7 +102,7 @@ def mesh_error_vs_reference(N_ref, N_values, L=15):
       'h', 'error', 'time', 'memory'.
     """
     T_ref, x_ref, y_ref, t_ref, m_ref = solve_quarter_plate(N_ref, L)
-    results = {'h': [], 'error': [], 'time': [], 'memory': []}
+    results = {'n': [], 'error': [], 'time': [], 'memory': []}
 
     for i in range(len(N_values)):
         T, x, y, t, m = solve_quarter_plate(N_values[i], L)
@@ -115,7 +115,10 @@ def mesh_error_vs_reference(N_ref, N_values, L=15):
         new_err_matrix = zoom.zoom_lil_matrix(T, T_ref.shape, T.shape)
         err = zoom.error(T_ref, new_err_matrix)
 
-        results['h'].append((N_values[i]))
+        #new_ref_matrix = zoom.dezoom_ref_matrix(T_ref, T_ref.shape, T.shape)
+        #err = zoom.error(new_ref_matrix, T)
+
+        results['n'].append((N_values[i]))
         results['error'].append(err)
         results['time'].append(t)
         results['memory'].append(m)
@@ -139,9 +142,9 @@ def plot_convergence(results, N_values):
     Plot error vs grid spacing using reference-based errors, and performance vs N.
     """
 #     # Sort h and corresponding errors ascending by h
-#     pairs = sorted(zip(results['h'], results['error']), key=lambda x: x[0])
+#     pairs = sorted(zip(results['n'], results['error']), key=lambda x: x[0])
 #     h_sorted, err_sorted = zip(*pairs)
-    h_sorted, err_sorted = results['h'], results['error']
+    h_sorted, err_sorted = results['n'], results['error']
 
 
     plt.figure()
@@ -170,17 +173,26 @@ def plot_convergence(results, N_values):
     plt.show()
 
 # test^2
+#monitor time of whole operation
+initial_time = time.time()
 
-N_ref = 99
+N_ref = 200
 coarser = np.arange(5, N_ref, 1)
 
 results = mesh_error_vs_reference(N_ref, coarser)
 
 # Plot reference solution
 Tref, xref, yref, _, _ = solve_quarter_plate(N_ref)
+#monitor time of whole operation
+operation_time = time.time() - initial_time
+print(f"Operation time : {operation_time}")
+
 plot_temperature(Tref, xref, yref, L=15)
+
+
 
 # Plot error convergence and performance
 plot_convergence(results, coarser)
 
-
+import upper_lower_bound_curve_fitting
+upper_lower_bound_curve_fitting.fitted_curves_plot(results['n'], results['error'])
