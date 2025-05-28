@@ -77,7 +77,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec):
     plt.figure()
     plt.plot(N_vals, mem_vals, 'ko', label='Data')
     plt.plot(N_smooth, mem_smooth, 'r-',
-             label=f"Lower Power law fit mem: mem ≈ {mem_fit[0]:.2e} · N^(-{mem_fit[1]:.3f}), R² = {r2_mem:.4f}")
+             label=f"Lower Power law fit mem: mem ≈ {memt[0]:.2e} · N^({-memt[1]:.3f}), R² = {r2_mem:.4f}")
     plt.xlabel('N')
     plt.ylabel('Memory')
     plt.title('Memory vs N (Linear Scale)')
@@ -85,11 +85,12 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec):
     plt.grid(True, linestyle='--')
     plt.tight_layout()
 
+
     # Plot in Log Log scale mem
     plt.figure()
     plt.loglog(N_vals, mem_vals, 'ko', label='Data')
     plt.loglog(N_smooth, mem_smooth, 'r-',
-             label=f"Lower Power law fit mem: mem ≈ {mem_fit[0]:.2e} · N^(-{mem_fit[1]:.3f}), R² = {r2_mem:.4f}")
+             label=f"Lower Power law fit mem: mem ≈ {memt[0]:.2e} · N^({-memt[1]:.3f}), R² = {r2_mem:.4f}")
     plt.xlabel('N')
     plt.ylabel('Memory')
     plt.title('Memory vs N (log Scale)')
