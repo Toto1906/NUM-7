@@ -5,13 +5,14 @@ import time
 import tracemalloc
 from main import simple_analisis
 import zoom
+import upper_lower_bound_curve_fitting as fit
 
 matplotlib.use('TkAgg')
 
 Text = 20  # Initial exterior temperature
 Tint = 500  # Initial interior temperature
 L_ = 15  # Length of square
-N_ = np.arange(10, 100, 10)  # Mesh size
+N_ = np.arange(5, 100, 5)  # Mesh size
 dxy_ = L_ / (N_ + 1)
 
 
@@ -60,4 +61,5 @@ def trace_mem_time_err(N, mem, err):
 
 tt, mem, err = multiple_analisis(N_, dxy_, Text, Tint)
 trace_mem_time_err(N_, mem, err)
+# fit.fitted_curves_plot(N_, err)
 

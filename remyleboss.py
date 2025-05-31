@@ -190,7 +190,6 @@ print(f"Operation time : {operation_time}")
 plot_temperature(Tref, xref, yref, L=15)
 
 
-
 # Plot error convergence and performance
 plot_convergence(results, coarser)
 
