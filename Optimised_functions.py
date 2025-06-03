@@ -131,7 +131,7 @@ def mesh_error_vs_reference(N_values, T_ref= T_reference_file, L=15):
 def plot_temperature(T, x, y, L):
     X, Y = np.meshgrid(x, y)
     fig1, ax1 = plt.subplots()
-    im = ax1.pcolormesh(X, Y, T, shading='auto', cmap='inferno')
+    im = ax1.pcolormesh(X, Y, T, shading='auto', cmap='afmhot')
     ax1.add_patch(plt.Rectangle((L / 3, L / 3), L / 3, L / 3, edgecolor='white', facecolor='none'))
     ax1.set_xticks(ticks=(0, L / 3, 2 * L / 3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
     ax1.set_yticks(ticks=(0, L / 3, 2 * L / 3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))

@@ -30,4 +30,4 @@ f.plot_temperature(Tmax, xmax, ymax, L=15)
 f.plot_convergence(results, coarser)
 
 import upper_lower_bound_curve_fitting
-upper_lower_bound_curve_fitting.fitted_curves_plot(results['n'], results['error'], results['memory'])
+upper_lower_bound_curve_fitting.fitted_curves_plot(results['n'], results['error'], results['memory'], results['time'])
