@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import matplotlib
 import time
-#matplotlib.use('TkAgg')
+matplotlib.use('TkAgg')
 
 start_time = time.time()
 
 Text = 20      # Initial exterior temperature
 Tint = 500     # Initial interior temperature
 L_ = 15          # Length of square
-N_ = 10          # Mesh size
+N_ = 100          # Mesh size
 dxy_ = L_/(N_+1)
 
 def simple_analisis(N, dxy, T_ext, T_int, multiple=False):
@@ -63,36 +63,36 @@ def simple_analisis(N, dxy, T_ext, T_int, multiple=False):
     return C
 
 
-# C = simple_analisis(N_, dxy_, Text, Tint)
-#
-# print("--- %s seconds ---" % (time.time() - start_time))
-#
-# # Setting the parameters of the plot
-# x = np.linspace(0, L_, N_+1)
-# y = np.linspace(0, L_, N_+1)
-# X, Y = np.meshgrid(x, y)
-#
-# # Inside rectangle of the plate
-# rect = patches.Rectangle((L_/3, L_/3), L_/3, L_/3, linewidth=1, edgecolor='black', facecolor='none')
-#
-# color='afmhot'
-#
-# # Plotting the temperature
-# fig1, (ax1) = plt.subplots(1, 1)
-#
-# im = ax1.pcolormesh(X, Y, C, cmap=color)
-# ax1.add_patch(rect)
-# ax1.set_xticks(ticks=(0, L_ / 3, 2 * L_ / 3, L_), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
-# ax1.set_yticks(ticks=(0, L_ / 3, 2 * L_ / 3, L_), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
-# ax1.tick_params(axis='both', which='major', labelsize=10)
-# ax1.set_title(r'Temperature diffusion of a plate of temperatures $T_{ext}=$' + f'{Text}' + r' and $T_{int}=$' + f'{Tint}')
-# ax1.set_aspect('equal')
-# fig1.colorbar(mappable=im, label=r'Temperature ($^{\circ}$C)')
-# fig1.savefig('Temperature_diffusion.png', dpi=200)
-#
-# # ax2.plot(x, C[int(L/2)])
-#
-# fig2, ax = plt.subplots(subplot_kw={"projection": "3d"})
-# ax.plot_surface(X, Y, C, cmap=color)
-#
-# plt.show()
+C = simple_analisis(N_, dxy_, Text, Tint)
+
+print("--- %s seconds ---" % (time.time() - start_time))
+
+# Setting the parameters of the plot
+x = np.linspace(0, L_, N_+1)
+y = np.linspace(0, L_, N_+1)
+X, Y = np.meshgrid(x, y)
+
+# Inside rectangle of the plate
+rect = patches.Rectangle((L_/3, L_/3), L_/3, L_/3, linewidth=1, edgecolor='black', facecolor='none')
+
+color='afmhot'
+
+# Plotting the temperature
+fig1, (ax1) = plt.subplots(1, 1)
+
+im = ax1.pcolormesh(X, Y, C, cmap=color)
+ax1.add_patch(rect)
+ax1.set_xticks(ticks=(0, L_ / 3, 2 * L_ / 3, L_), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
+ax1.set_yticks(ticks=(0, L_ / 3, 2 * L_ / 3, L_), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
+ax1.tick_params(axis='both', which='major', labelsize=10)
+ax1.set_title(r'Temperature diffusion of a plate of temperatures $T_{ext}=$' + f'{Text}' + r' and $T_{int}=$' + f'{Tint}')
+ax1.set_aspect('equal')
+fig1.colorbar(mappable=im, label=r'Temperature ($^{\circ}$C)')
+fig1.savefig('Temperature_diffusion.png', dpi=200)
+
+# ax2.plot(x, C[int(L/2)])
+
+fig2, ax = plt.subplots(subplot_kw={"projection": "3d"})
+ax.plot_surface(X, Y, C, cmap=color)
+
+plt.show()

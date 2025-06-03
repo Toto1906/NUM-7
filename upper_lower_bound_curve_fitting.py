@@ -14,8 +14,11 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec):
     # Extract data
 
     N_vals = np.array(N_values_vec)
+    print(N_vals.shape)
     errors = np.array(error_values_vec)
+    print(errors.shape)
     mem_vals = np.array(mem_values_vec)
+    print(mem_vals.shape)
 
     peaks_pos, _ = find_peaks(errors, distance=5)
     print(peaks_pos)

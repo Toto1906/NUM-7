@@ -27,10 +27,12 @@ def multiple_analisis(N, dxy, T_ext, T_int):
         tracemalloc.start()
         C = simple_analisis(N[i], dxy[i], T_ext, T_int)
         current, peak = tracemalloc.get_traced_memory()
+        print(current, peak)
         tracemalloc.stop()
         peak_mem = peak // 1024
         end = time.time()
         run_time = end - start
+        print(run_time)
         tt_ = np.append(tt_, run_time)
         mem_ = np.append(mem_, peak_mem)
 
@@ -47,19 +49,25 @@ def trace_mem_time_err(N, mem, err):
     ax1.plot(N, mem, 's--', label='Memory (kB)', color='gray')
     ax1.set_title('Memory required')
     ax1.set_xlabel('N')
-    ax1.plot(N, tt, 'o-', label='Time (s)')
-    ax1.set_title('Time required')
     ax1.grid(True, which='both', linestyle='--')
 
     fig2, ax2 = plt.subplots(1, 1, sharex=True)
     ax2.set_xlabel('N')
-    ax2.plot(N, err)
+    ax2.plot(N, err, marker='o')
     ax2.set_title('Error')
     ax2.set_xlabel('N')
+
+    fig3, ax3 = plt.subplots(1, 1, sharex=True)
+    ax2.set_xlabel('N')
+    ax3.plot(N, tt, 'o-', label='Time (s)')
+    ax3.set_title('Time required')
+    ax2.set_xlabel('N')
+
     plt.show()
 
 
+
 tt, mem, err = multiple_analisis(N_, dxy_, Text, Tint)
-trace_mem_time_err(N_, mem, err)
-# fit.fitted_curves_plot(N_, err)
+# trace_mem_time_err(N_, mem, err)
+fit.fitted_curves_plot(N_, err, mem)
 

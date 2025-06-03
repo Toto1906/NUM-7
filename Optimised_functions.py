@@ -130,15 +130,16 @@ def mesh_error_vs_reference(N_values, T_ref= T_reference_file, L=15):
 
 def plot_temperature(T, x, y, L):
     X, Y = np.meshgrid(x, y)
-    fig, ax = plt.subplots()
-    im = ax.pcolormesh(X, Y, T, shading='auto', cmap='inferno')
-    ax.add_patch(plt.Rectangle((L / 3, L / 3), L / 3, L / 3, edgecolor='white', facecolor='none'))
-    fig.colorbar(im, ax=ax, label='Temperature (°C)')
-    ax.set_title(f'Plate Temperature Distribution N = {len(T)-1}')
-    ax.set_xlabel('x');
-    ax.set_ylabel('y')
-    ax.set_aspect('equal');
-    plt.tight_layout();
+    fig1, ax1 = plt.subplots()
+    im = ax1.pcolormesh(X, Y, T, shading='auto', cmap='inferno')
+    ax1.add_patch(plt.Rectangle((L / 3, L / 3), L / 3, L / 3, edgecolor='white', facecolor='none'))
+    ax1.set_xticks(ticks=(0, L / 3, 2 * L / 3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
+    ax1.set_yticks(ticks=(0, L / 3, 2 * L / 3, L), labels=('0', r'$\frac{L}{3}$', r'$\frac{2L}{3}$', r'$L$'))
+    ax1.tick_params(axis='both', which='major', labelsize=10)
+    ax1.set_title(f'Plate Temperature Distribution N = {len(T)-1}')
+    ax1.set_aspect('equal')
+    fig1.colorbar(mappable=im, label=r'Temperature ($^{\circ}$C)')
+
     plt.show()
 
 
