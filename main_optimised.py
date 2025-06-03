@@ -11,7 +11,7 @@ import numpy as np
 #monitor time of whole operation
 initial_time = time.time()
 
-N_max = 100
+N_max = 200
 coarser = np.arange(5, N_max, 1)
 
 results = f.mesh_error_vs_reference(coarser)
