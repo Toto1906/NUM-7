@@ -39,7 +39,7 @@ def multiple_analisis(N, dxy, T_ext, T_int):
         peak_mem = peak // 1024
         end = time.time()
         run_time = end - start
-        print(f'Time taken: {run_time}')
+        print(f'Time taken: {run_time}\n')
         print('--------------------')
         tt_ = np.append(tt_, run_time)
         mem_ = np.append(mem_, peak_mem)
@@ -68,7 +68,8 @@ def trace_mem_time_err(N, mem, err, tt):
     ax1.set_title('Performance vs N')
     ax1.set_xlabel('N')
     ax1.grid(True, which='both', linestyle='--')
-
+    ax1.legend('right')
+    ax2.legend('left')
     fig1.savefig(f'N={N[-1]}_Performance_vs_N.png')
 
     # Plot of error vs N
