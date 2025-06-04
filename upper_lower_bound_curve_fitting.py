@@ -1,4 +1,3 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -65,6 +64,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.legend()
     plt.grid(True, linestyle='--')
     plt.tight_layout()
+    plt.savefig(f'N={N_vals[-1]}_Error_fit.png')
 
     # Plot in log-log scale
     plt.figure()
@@ -77,6 +77,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.legend()
     plt.grid(True, which='both', linestyle='--')
     plt.tight_layout()
+    plt.savefig(f'N={N_vals[-1]}_Log_Log_Error_fit.png')
 
 
     # Plot in linear scale mem
@@ -90,6 +91,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.legend()
     plt.grid(True, linestyle='--')
     plt.tight_layout()
+    plt.savefig(f'N={N_vals[-1]}_Memory_fit.png')
 
     # Plot in linear scale time
     plt.figure()
@@ -102,6 +104,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.legend()
     plt.grid(True, linestyle='--')
     plt.tight_layout()
+    plt.savefig(f'N={N_vals[-1]}_Log_Log_Memory_fit.png')
 
 
     # Plot in Log Log scale mem
@@ -115,6 +118,8 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.legend()
     plt.grid(True, linestyle='--')
     plt.tight_layout()
+    plt.savefig(f'N={N_vals[-1]}_Time_fit.png')
+
 
     # Plot in Log Log scale time
     plt.figure()
@@ -127,4 +132,5 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.legend()
     plt.grid(True, linestyle='--')
     plt.tight_layout()
+    plt.savefig(f'N={N_vals[-1]}_Log_Log_Time_fit.png')
     plt.show()
