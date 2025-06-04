@@ -12,7 +12,7 @@ matplotlib.use('TkAgg')
 Text = 20  # Initial exterior temperature
 Tint = 500  # Initial interior temperature
 L_ = 15  # Length of square
-N_ = np.arange(5, 100, 5)  # Mesh size
+N_ = np.arange(5, 100, 1)  # Mesh size
 dxy_ = L_ / (N_ + 1)
 
 
@@ -23,16 +23,18 @@ def multiple_analisis(N, dxy, T_ext, T_int):
     M_ref = simple_analisis(N[len(N)-1], dxy[len(dxy)-1], T_ext, T_int)
 
     for i in range(len(N)):
+        print(f'\n Solving for N = {N[i]}:')
         start = time.time()
         tracemalloc.start()
         C = simple_analisis(N[i], dxy[i], T_ext, T_int)
         current, peak = tracemalloc.get_traced_memory()
-        print(current, peak)
+        print(f'Peak memory:{peak}')
         tracemalloc.stop()
         peak_mem = peak // 1024
         end = time.time()
         run_time = end - start
-        print(run_time)
+        print(f'Time taken: {run_time}')
+        print('--------------------')
         tt_ = np.append(tt_, run_time)
         mem_ = np.append(mem_, peak_mem)
 
