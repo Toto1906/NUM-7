@@ -101,10 +101,10 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.xlabel('N')
     plt.ylabel('Time')
     plt.title('Time vs N (Linear Scale)')
-    plt.legend()
+    plt.legend('right')
     plt.grid(True, linestyle='--')
     plt.tight_layout()
-    plt.savefig(f'N={N_vals[-1]}_Log_Log_Memory_fit.png')
+    plt.savefig(f'N={N_vals[-1]}_Time_fit.png')
 
 
     # Plot in Log Log scale mem
@@ -118,7 +118,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.legend()
     plt.grid(True, linestyle='--')
     plt.tight_layout()
-    plt.savefig(f'N={N_vals[-1]}_Time_fit.png')
+    plt.savefig(f'N={N_vals[-1]}_Log_Log_Mem_fit.png')
 
 
     # Plot in Log Log scale time
