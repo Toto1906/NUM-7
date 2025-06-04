@@ -44,7 +44,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     print(f"Upper Power law fit high : error ≈ {popt_pow_high[0]:.2e} · N^(-{popt_pow_high[1]:.3f}), R² = {r2_pow_high:.4f}")
     print(f"Lower Power law fit low: error ≈ {popt_pow_low[0]:.2e} · N^(-{popt_pow_low[1]:.3f}), R² = {r2_pow_low:.4f}")
     print(f"Power law fit mem: mem ≈ {memt[0]:.2e} · N^({-memt[1]:.3f}), R² = {r2_mem:.4f}")
-    print(f"Power law fit time: time ≈ {timet[0]:.2e} · N^({-timet[1]:.3f}), R² = {r2_mem:.4f}")
+    print(f"Power law fit time: time ≈ {timet[0]:.2e} · N^({-timet[1]:.3f}), R² = {r2_time:.4f}")
 
     # Smooth N values for plotting
     N_smooth = np.linspace(min(N_vals), max(N_vals), 300)
@@ -125,7 +125,7 @@ def fitted_curves_plot(N_values_vec, error_values_vec, mem_values_vec, time_valu
     plt.figure()
     plt.loglog(N_vals, time_vals, 'ko', label='Data')
     plt.loglog(N_smooth, time_smooth, 'r-',
-               label=f"Power law fit time: time ≈ {timet[0]:.2e} · N^({-timet[1]:.3f}), R² = {r2_mem:.4f}")
+               label=f"Power law fit time: time ≈ {timet[0]:.2e} · N^({-timet[1]:.3f}), R² = {r2_time:.4f}")
     plt.xlabel('N')
     plt.ylabel('Time')
     plt.title('Time vs N (log Scale)')

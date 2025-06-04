@@ -68,8 +68,8 @@ def trace_mem_time_err(N, mem, err, tt):
     ax1.set_title('Performance vs N')
     ax1.set_xlabel('N')
     ax1.grid(True, which='both', linestyle='--')
-    ax1.legend('right')
-    ax2.legend('left')
+    ax1.legend(loc='upper right',bbox_to_anchor=(1.0, 1.0))
+    ax2.legend(loc='upper left',bbox_to_anchor=(0.0, 0.0))
     fig1.savefig(f'N={N[-1]}_Performance_vs_N.png')
 
     # Plot of error vs N
